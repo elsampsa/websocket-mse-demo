@@ -25,7 +25,7 @@ Roughly like this:
 
 To try it out follow the steps ..
 
-## 1. Install Apache2 and configure it for websockets
+### 1. Install Apache2 and configure it for websockets
 
 Install Apache2 and some additional modules for it:
 
@@ -56,20 +56,20 @@ Restart Apache2
     systemctl restart apache2
     
     
-## 2. Install python dependencies
+### 2. Install python dependencies
 
 Install websocket module with
 
     pip3 install --user --upgrade websocket
     
-## 3. Setup your files
+### 3. Setup your files
 
 Copy **ws_client.html** to $HOME/public_html/ws_client.html
 
 Edit **ws_serve.py** for your ip camera address, username and password
 
 
-## 4. Run it!
+### 4. Run it!
 
 1. Confirm that your Apache2 is working by pointing your browser to:
 
