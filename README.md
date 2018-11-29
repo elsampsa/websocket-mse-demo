@@ -3,9 +3,9 @@
 
 It this rudimentary demo we're streaming live video from an RTSP camera to your HTML5 browser.
 
-Video is streamed as raw H264 video stream.  No transcoding takes place.  No flash or pure-javascript decoders required.
+Video is streamed as H264 video stream encapsulated in MP4.  No transcoding takes place.  No flash or pure-javascript decoders required.
 
-Video is decoded and presented in the browser using the W3 Media Source Extensions that are well supported by all major browsers by now.
+Video is decoded and presented in the browser using the W3 Media Source Extensions that is well supported by all major browsers by now.
 
 ## How does it work?
 
@@ -19,9 +19,11 @@ Roughly like this:
                                   - W3 MediaSource Extension
 
 - Python program **ws_serve.py** is using ffmpeg as a slave process 
-- It reads video stream from ffmpeg's stdout
+- It reads mp4 muxed video stream from ffmpeg's stdout
 - That stream is passed through websocket to **ws_client.html**
 - Client uses the W3 Media Source Extensions to push the payload into browsers video decoding infrastructure
+
+To try it out follow the steps ..
 
 ## 1. Install Apache2 and configure it for websockets
 
