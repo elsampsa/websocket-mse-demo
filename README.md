@@ -87,7 +87,7 @@ Edit **ws_serve.py** for your ip camera address, username and password
 3. Point your browser to (prefer the latter):
 
     http://localhost/~your_username/ws_client.html
-    
+
     http://localhost/~your_username/ws_client_new.html
 
 
@@ -97,6 +97,8 @@ Live video rolls for a minute or so, until it stops.
 fragments.
 
 If you want a more serious solution, please see [this](https://elsampsa.github.io/valkka-examples/_build/html/cloud.html) and [this](https://github.com/elsampsa/valkka-examples/tree/master/example_projects/basic.)
+
+Other problems might arise if your video also includes audio (for tips, see the ws_client_new.html)
 
 ## License 
 
