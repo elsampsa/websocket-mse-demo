@@ -13,14 +13,19 @@ Roughly like this:
 
     server-side                   client side
     
-    ws_serve.py ==> websocket ==> ws_client.html
+    ws_serve.py ==> websocket ==> ws_client.html or ws_client_new.html
     
     - FFmpeg                      - JavaScript
                                   - W3 MediaSource Extension
 
 - Python program **ws_serve.py** is using ffmpeg as a slave process 
 - It reads mp4 muxed video stream from ffmpeg's stdout
+
 - That stream is passed through websocket to **ws_client.html**
+
+- **NOTE**: please prefer the updated **ws_client_new.html** as it included stuff from [this stackoverflow question](https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragmented-live-mp4-stream/)
+
+
 - Client uses the W3 Media Source Extensions to push the payload into browsers video decoding infrastructure
 
 To try it out follow the steps ..
@@ -79,12 +84,19 @@ Edit **ws_serve.py** for your ip camera address, username and password
 
     python3 ws_serve.py
     
-3. Point your browser to:
+3. Point your browser to (prefer the latter):
 
     http://localhost/~your_username/ws_client.html
+    
+    http://localhost/~your_username/ws_client_new.html
 
 
-Live video rolls for a minute or so, until it stops.  Don't no why, but *you* may continue from here.. :)
+Live video rolls for a minute or so, until it stops.
+
+.. because, when reading ffmpeg stdout, the mp4 boxes should be reconstructed from
+fragments.
+
+If you want a more serious solution, please see [this](https://elsampsa.github.io/valkka-examples/_build/html/cloud.html) and [this](https://github.com/elsampsa/valkka-examples/tree/master/example_projects/basic.)
 
 ## License 
 
