@@ -17,7 +17,12 @@ https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragme
     </head>
     
     <body>
-        <video id="stream_live" width="640" height="480" controls="false" autoplay="true" preload="auto">
+        <!-- muted attribute required for chrome autoplay-->
+        <video id="stream_live" 
+            width="640" height="480" 
+            controls="false" autoplay="true"
+            muted="muted" 
+            preload="auto">
             Your browser does not support the video tag.
         </video> 
     </body>
@@ -27,7 +32,13 @@ https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragme
             var verbose = false;
             // var verbose = true; // enable for saturating the console ..
             var buffering_sec = 1; // use some reasonable value
-            
+
+            var buffering_sec_seek = buffering_sec*0.9; 
+            // ..seek the stream if it's this much away or
+            // from the last available timestamp
+            var buffering_sec_seek_distance = buffering_sec*0.5; 
+            // .. jump to this distance from the last avail. timestamp
+
             // *** INTERNAL PARAMETERS ***
             // set mimetype and codec
             var mimeType = "video/mp4";
@@ -144,14 +155,19 @@ https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragme
                     return;
                 }
                 
-                
-                if ((cc > 20) && ( (stream_live.buffered.end(0)-stream_live.currentTime) > buffering_sec)) {
-                    console.log("seek from ", stream_live.currentTime," to ", stream_live.buffered.end(0));
-                    stream_live.fastSeek(stream_live.buffered.end(0));
+                // keep the latency to minimum
+                let latest = stream_live.duration;
+                if ((stream_live.duration >= buffering_sec) && 
+                    ((latest - stream_live.currentTime) > buffering_sec_seek)) {
+                    console.log("seek from ", stream_live.currentTime, " to ", latest);
+                    df = (stream_live.duration - stream_live.currentTime); // this much away from the last available frame
+                    if ((df > buffering_sec_seek)) {
+                        seek_to = stream_live.duration - buffering_sec_seek_distance;
+                        stream_live.currentTime = seek_to;
+                        }
                 }
-                
+
                 data = arr;
-                
                 if (!stream_started) {
                     if (verbose) {console.log("Streaming started: ", memview[0], memview[1], memview[2], memview[3], memview[4]);}
                     source_buffer.appendBuffer(data);
