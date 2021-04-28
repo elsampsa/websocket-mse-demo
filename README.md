@@ -58,7 +58,7 @@ nginx -p $PWD -c ./nginx.conf -g 'error_log error.log warn;'
 ```
 killall -9 nginx; python3 ws_serve_new.py rtsp://user:password@ip-address
 ```
-An X-window is opened to shows you the live video stream.
+An X-window is opened that shows you the live video stream.
 
 ### 2. Open your browser 
 Your low-latency live video is now available at [http://localhost:8089](http://localhost:8089)
