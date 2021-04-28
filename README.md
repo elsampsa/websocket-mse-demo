@@ -5,7 +5,7 @@
 
 It this demo we're streaming live video from an RTSP camera to your HTML5 browser.
 
-Video is streamed as H264 encapsulated in MP4.  No transcoding takes place.  No browser-side flash or pure-javascript decoders required.
+Video is streamed as H264 encapsulated in MP4.  No transcoding takes place in the stream-to-browser pipeline.  No browser-side flash or pure-javascript decoders required.
 
 Video is decoded and presented in the browser using the W3 Media Source Extensions that is well supported by all major browsers by now.
 
@@ -56,7 +56,7 @@ nginx -p $PWD -c ./nginx.conf -g 'error_log error.log warn;'
 
 ### 1. Start the program with
 ```
-killall -9 nginx; python3 ws_serve_new.py
+killall -9 nginx; python3 ws_serve_new.py rtsp://user:password@ip-address
 ```
 An X-window is opened to shows you the live video stream.
 
