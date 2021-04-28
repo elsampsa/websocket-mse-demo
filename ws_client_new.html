@@ -216,7 +216,7 @@ https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragme
                 
                 source_buffer.addEventListener("updateend",loadPacket);
            
-                ws = new WebSocket("ws://localhost/ws/");
+                ws = new WebSocket("ws://localhost:8089/ws/");
                 ws.binaryType = "arraybuffer";
                 ws.onmessage = function (event) {
                     putPacket(event.data);

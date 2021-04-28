@@ -1,104 +1,78 @@
 
 # Live H264 stream from RTSP camera to your browser
 
-It this rudimentary demo we're streaming live video from an RTSP camera to your HTML5 browser.
+*a new, completely rewritten version!*
 
-Video is streamed as H264 video stream encapsulated in MP4.  No transcoding takes place.  No flash or pure-javascript decoders required.
+It this demo we're streaming live video from an RTSP camera to your HTML5 browser.
+
+Video is streamed as H264 encapsulated in MP4.  No transcoding takes place.  No browser-side flash or pure-javascript decoders required.
 
 Video is decoded and presented in the browser using the W3 Media Source Extensions that is well supported by all major browsers by now.
+
+Only H264 is supported - browser MSE's do not support H246 yet (and neither does libValkka).
 
 ## How does it work?
 
 Roughly like this:
 
-    server-side                   client side
+```
+server-side                                   nginx
     
-    ws_serve.py ==> websocket ==> ws_client.html or ws_client_new.html
-    
-    - FFmpeg                      - JavaScript
-                                  - W3 MediaSource Extension
+ws_serve_new.py <-- websocket <---------------+-* <----+  <---- web browser        
+                                              |        |
+                    ws_client_new.html  <-----+        |
+                            |                          |
+                            +--------------------------+
+                                  (requests websocket)
 
-- Python program **ws_serve.py** is using ffmpeg as a slave process 
-- It reads mp4 muxed video stream from ffmpeg's stdout
+Starts nginx
+Uses libValkka                     JavaScript
+                                   W3 MediaSource Extension
+```
 
-- That stream is passed through websocket to **ws_client.html**
+The web-browser client uses the W3 Media Source Extensions to push the payload into browsers video decoding infrastructure.
 
-- **NOTE**: please prefer the updated **ws_client_new.html** as it included stuff from [this stackoverflow question](https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragmented-live-mp4-stream/)
+## Requirements
 
+- Install libValkka as instructed [here](https://elsampsa.github.io/valkka-examples/_build/html/requirements.html)
+- Install nginx with ``sudo apt-get install nginx``
+- Install python websocket module with ``pip3 install --user websocket``
+- Prepare nginx user rights:
+```
+sudo addgroup nginx
+sudo chgrp nginx /var/lib/nginx
+sudo adduser $USER nginx
+sudo chmod g+r+w+x /var/lib/nginx
+```
+- You need to do logout/login (so that group change takes effect)
+- Test if your nginx works correctly
+```
+nginx -p $PWD -c ./nginx.conf -g 'error_log error.log warn;'
+```
 
-- Client uses the W3 Media Source Extensions to push the payload into browsers video decoding infrastructure
+- Setup your camera so that it sends H264 only.
 
-To try it out follow the steps ..
+## Usage
 
-### 1. Install Apache2 and configure it for websockets
+### 1. Start the program with
+```
+killall -9 nginx; python3 ws_serve_new.py
+```
+An X-window is opened to shows you the live video stream.
 
-Install Apache2 and some additional modules for it:
+### 2. Open your browser 
+Your low-latency live video is now available at [http://localhost:8089](http://localhost:8089)
 
-    sudo apt install apache2
-    sudo a2enmod userdir
-    sudo a2enmod proxy
-    sudo a2enmod proxy_http
-    sudo a2enmod proxy_wstunnel
-    
-Add to
+## Now what?
 
+- Please tell me in the issues if this worked for you or not and what camera & other setup you are using
+- ..i.e. don't just report the bugs, but also successes!  :)
+- If you want a more serious solution, please see [this](https://elsampsa.github.io/valkka-examples/_build/html/cloud.html) and [this](https://github.com/elsampsa/valkka-examples/tree/master/example_projects/basic)
 
-    /etc/apache2/sites-available/000-default.conf
-    
-The following lines
-    
-    ProxyRequests Off 
-    ProxyPass /ws/  ws://example.com:3001
+## References
 
-Make directory for user web content
-    
-    cd
-    mkdir public_html
-    cd public_html 
-
-Restart Apache2
-    
-    systemctl restart apache2
-    
-    
-### 2. Install python dependencies
-
-Install websocket module with
-
-    pip3 install --user --upgrade websocket
-    
-### 3. Setup your files
-
-Copy **ws_client.html** to $HOME/public_html/ws_client.html
-
-Edit **ws_serve.py** for your ip camera address, username and password
-
-
-### 4. Run it!
-
-1. Confirm that your Apache2 is working by pointing your browser to:
-
-    http://localhost
-    
-2. Start serving the websocket with:
-
-    python3 ws_serve.py
-    
-3. Point your browser to (prefer the latter):
-
-    http://localhost/~your_username/ws_client.html
-
-    http://localhost/~your_username/ws_client_new.html
-
-
-Live video rolls for a minute or so, until it stops.
-
-.. because, when reading ffmpeg stdout, the mp4 boxes should be reconstructed from
-fragments.
-
-If you want a more serious solution, please see [this](https://elsampsa.github.io/valkka-examples/_build/html/cloud.html) and [this](https://github.com/elsampsa/valkka-examples/tree/master/example_projects/basic)
-
-Other problems might arise if your video also includes audio (for tips, see the ws_client_new.html)
+- [frag-mp4 stackoverflow question](https://stackoverflow.com/questions/54186634/sending-periodic-metadata-in-fragmented-live-mp4-stream/)
+- [frag-mp4 with libValkka](https://elsampsa.github.io/valkka-examples/_build/html/cloud.html)
 
 ## License 
 
@@ -106,7 +80,7 @@ MIT
 
 ## Copyright
 
-Copyright 2018 Sampsa Riikonen
+Copyright 2018-2020 Sampsa Riikonen
 
 ## Author
 
