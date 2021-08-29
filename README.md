@@ -36,7 +36,7 @@ The web-browser client uses the W3 Media Source Extensions to push the payload i
 
 - Install libValkka as instructed [here](https://elsampsa.github.io/valkka-examples/_build/html/requirements.html)
 - Install nginx with ``sudo apt-get install nginx``
-- Install python websocket module with ``pip3 install --user websocket``
+- Install python websocket module with ``pip3 install --user websockets``
 - Prepare nginx user rights:
 ```
 sudo addgroup nginx
