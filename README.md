@@ -1,6 +1,10 @@
 
 # Live H264 stream from RTSP camera to your browser
 
+**WARNING** *This repo is obsolete (and has some bugs), please use instead* https://github.com/elsampsa/valkka-streamer
+
+* * * * 
+
 *a new, completely rewritten version!*
 
 It this demo we're streaming live video from an RTSP camera to your HTML5 browser.
